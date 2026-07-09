@@ -1,63 +1,254 @@
-# 🏥 FastAPI Patient Management API
+# 🏥 FastAPI Patient Management System
 
-A RESTful Patient Management API built with **FastAPI** to strengthen backend development fundamentals for AI applications.
+A production-inspired RESTful Patient Management API built using **FastAPI**, **PostgreSQL**, **SQLAlchemy**, **Redis**, **Celery**, **Alembic**, and **Docker**.
 
-This project supports CRUD operations, request validation, computed fields, query parameters, sorting, and exception handling using FastAPI and Pydantic.
+The project demonstrates modern backend development practices including layered architecture, ORM-based database interactions, asynchronous background processing, caching, database migrations, and containerized deployment.
 
 ---
 
-## 📌 Key Features
+## 🚀 Features
 
-- ✅ RESTful CRUD API
-- ✅ Request validation using Pydantic
-- ✅ Computed BMI and Health Verdict
-- ✅ Partial Updates (PUT)
-- ✅ Query Parameter-based Sorting
-- ✅ Interactive Swagger Documentation
-- ✅ HTTP Exception Handling
+### Patient Management
 
-## Main Functions
-
-- Create Patient Records
-- View All Patients
+- Create Patient
+- Retrieve All Patients
 - Retrieve Patient by ID
 - Update Patient Information
-- Delete Patient Records
-- Sort Patients by Height, Weight, or BMI
+- Delete Patient
+
+### Automatic Health Analytics
+
 - Automatic BMI Calculation
 - Automatic Health Verdict Generation
-- Request Validation using Pydantic
-- HTTP Exception Handling
-- Interactive Swagger Documentation
+
+### Backend Features
+
+- FastAPI REST API
+- PostgreSQL Database
+- SQLAlchemy ORM
+- Alembic Database Migrations
+- Redis Caching
+- Celery Background Tasks
+- Docker & Docker Compose
+- Layered Project Architecture
+- Environment Variable Configuration
 
 ---
 
-## Tech Stack
+# 🛠 Tech Stack
 
-- Python
-- FastAPI
-- Pydantic
-- JSON
-- Uvicorn
+| Category | Technology |
+|-----------|------------|
+| Language | Python 3 |
+| Framework | FastAPI |
+| Database | PostgreSQL |
+| ORM | SQLAlchemy |
+| Validation | Pydantic |
+| Database Migration | Alembic |
+| Cache | Redis |
+| Background Jobs | Celery |
+| API Server | Uvicorn |
+| Containerization | Docker, Docker Compose |
 
 ---
 
-## API Endpoints
+# 📁 Project Structure
+
+```text
+fastapi-patient-api/
+
+│
+├── app/
+│   ├── api/
+│   │   └── patients.py
+│   │
+│   ├── services/
+│   │   └── bmi.py
+│   │
+│   ├── __init__.py
+│   ├── celery_app.py
+│   ├── config.py
+│   ├── crud.py
+│   ├── database.py
+│   ├── main.py
+│   ├── models.py
+│   ├── redis_client.py
+│   ├── schemas.py
+│   └── tasks.py
+│
+├── alembic/
+│
+├── screenshots/
+│
+├── scripts/
+│   └── seed_db.py
+│
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── alembic.ini
+├── docker-compose.yml
+├── Dockerfile
+├── README.md
+└── requirements.txt
+```
+
+---
+
+# 🏗 Architecture
+
+```text
+                     Client
+
+                        │
+                        ▼
+
+                 FastAPI REST API
+
+                /                 \
+               ▼                   ▼
+
+      SQLAlchemy ORM         Redis Cache
+
+               │                   │
+
+               ▼                   ▼
+
+        PostgreSQL DB       Celery Worker
+
+               │                   │
+
+               └──────► Background Tasks
+```
+
+---
+
+# 📌 API Endpoints
 
 | Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/` | Home |
-| GET | `/about` | About API |
-| GET | `/view` | View all patients |
-| GET | `/patient/{patient_id}` | Get patient by ID |
-| GET | `/sort` | Sort patients |
-| POST | `/create` | Create patient |
-| PUT | `/update/{patient_id}` | Update patient |
-| DELETE | `/delete/{patient_id}` | Delete patient |
+|--------|----------|-------------|
+| GET | `/patients` | Retrieve all patients |
+| GET | `/patients/{id}` | Retrieve patient by ID |
+| POST | `/patients` | Create a new patient |
+| PUT | `/patients/{id}` | Update patient details |
+| DELETE | `/patients/{id}` | Delete patient |
 
 ---
 
-## Screenshots
+# ⚙ Local Setup
+
+## Clone Repository
+
+```bash
+git clone https://github.com/Smriti2929/fastapi-patient-api.git
+
+cd fastapi-patient-api
+```
+
+---
+
+## Create Virtual Environment
+
+```bash
+python -m venv myenv
+```
+
+Windows
+
+```bash
+myenv\Scripts\activate
+```
+
+Linux / Mac
+
+```bash
+source myenv/bin/activate
+```
+
+---
+
+## Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Configure Environment Variables
+
+Create a `.env` file using `.env.example`.
+
+Example:
+
+```env
+DATABASE_URL=postgresql://postgres:password@localhost:5432/patient_db
+
+REDIS_URL=redis://localhost:6379/0
+```
+
+---
+
+## Apply Database Migrations
+
+```bash
+alembic upgrade head
+```
+
+---
+
+## Start Redis
+
+```bash
+docker run -d -p 6379:6379 redis:7
+```
+
+---
+
+## Start Celery Worker
+
+```bash
+celery -A app.celery_app.celery worker --loglevel=info
+```
+
+---
+
+## Run FastAPI
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Open Swagger UI:
+
+```
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# 🐳 Running with Docker
+
+```bash
+docker compose up --build
+```
+
+The application, PostgreSQL, Redis, and Celery Worker will start automatically.
+
+---
+
+# ⚡ Background Tasks
+
+Whenever a patient is created:
+
+- Patient data is stored in PostgreSQL.
+- A background task is queued in Redis.
+- Celery Worker processes the task asynchronously.
+- The API responds immediately without waiting for task completion.
+
+---
+
+# 📸 Screenshots
 
 ### Swagger Documentation
 ![Swagger UI](screenshots/swagger-ui.png)
@@ -88,56 +279,16 @@ This project supports CRUD operations, request validation, computed fields, quer
 
 ---
 
-## Installation
+# 🔮 Future Improvements
 
-```bash
-git clone https://github.com/yourusername/fastapi-patient-api.git
-
-cd fastapi-patient-api
-```
-
-Create a virtual environment
-
-```bash
-python -m venv myenv
-```
-
-Activate
-
-Windows
-
-```bash
-myenv\Scripts\activate
-```
-
-Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-Run
-
-```bash
-uvicorn main:app --reload
-```
-
-Open
-
-```
-http://127.0.0.1:8000/docs
-```
+- JWT Authentication
+- Role-Based Access Control
+- Pytest Unit Tests
+- GitHub Actions CI/CD
+- Kubernetes Deployment
+- RabbitMQ Message Broker
+- Neo4j Integration
 
 ---
-
-## Future Improvements
-
-- PostgreSQL Integration
-- SQLAlchemy ORM
-- JWT Authentication
-- Docker
-- Modular Project Structure
-- Deployment on Render/AWS
-
 
 
