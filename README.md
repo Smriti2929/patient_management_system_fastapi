@@ -4,6 +4,15 @@ A production-inspired RESTful Patient Management API built using **FastAPI**, **
 
 The project demonstrates modern backend development practices including layered architecture, ORM-based database interactions, asynchronous background processing, caching, database migrations, and containerized deployment.
 
+## 🚀 Live Demo
+
+**Live API:** https://patient-management-system-fastapi-2lpl.onrender.com
+
+**Swagger Docs:** https://patient-management-system-fastapi-2lpl.onrender.com/docs
+
+> **Deployment Note**
+> The application is deployed on Render's free tier. The complete feature set (including Redis caching, Celery background workers, and production database migrations) is available when running the project locally with Docker Compose.
+
 ---
 
 ## 🚀 Features
